@@ -9,63 +9,6 @@ enum BlacklistAction {
     KEEP,
 }
 
-// Conflicting default shortcuts
-// REMOVE if both alt and meta conflict, otherwise KEEP
-const altBlacklist: { [actionId: string]: BlacklistAction | undefined } = {
-    $Undo: BlacklistAction.REMOVE, // alt BACK_SPACE
-    $Redo: BlacklistAction.REMOVE, // alt shift BACK_SPACE
-    PreviousTab: BlacklistAction.REMOVE, // alt LEFT
-    PreviousEditorTab: BlacklistAction.REMOVE, // alt shift LEFT
-    NextTab: BlacklistAction.REMOVE, // alt RIGHT
-    NextEditorTab: BlacklistAction.REMOVE, // alt shift RIGHT
-    'Diff.PrevChange': BlacklistAction.REMOVE, // alt LEFT
-    'Diff.NextChange': BlacklistAction.REMOVE, // alt RIGHT
-    'Diff.ApplyLeftSide': BlacklistAction.REMOVE, // alt shift RIGHT
-    'Diff.ApplyRightSide': BlacklistAction.REMOVE, // alt shift LEFT
-    'Vcs.QuickListPopupAction': BlacklistAction.KEEP, // alt BACK_QUOTE
-    EditorContextInfo: BlacklistAction.KEEP, // alt q
-};
-
-// Additional shortcuts from "Mac OS X 10.5+.xml" and more for consistent text editor experience
-const additionalMacShortcuts: { [actionId: string]: string[] | undefined } = {
-    // Text editing
-    EditorPreviousWord: ['alt LEFT'],
-    EditorNextWord: ['alt RIGHT'],
-    EditorPreviousWordWithSelection: ['alt shift LEFT'],
-    EditorNextWordWithSelection: ['alt shift RIGHT'],
-    EditorDeleteToWordStart: ['alt BACK_SPACE'],
-    EditorDeleteToWordEnd: ['alt DELETE'],
-    EditorLineStart: ['meta LEFT'],
-    EditorLineEnd: ['meta RIGHT'],
-    EditorLineStartWithSelection: ['meta shift LEFT'],
-    EditorLineEndWithSelection: ['meta shift RIGHT'],
-    EditorDeleteLine: ['meta BACK_SPACE'],
-    // Editor actions
-    $Cut: ['meta X'],
-    $Copy: ['meta C'],
-    $Paste: ['meta V'],
-    $Undo: ['meta Z'],
-    $Redo: ['meta shift Z'],
-    $SelectAll: ['meta A'],
-    $Delete: ['BACK_SPACE', 'meta BACK_SPACE'],
-    Find: ['meta F'],
-    FindNext: ['meta G'],
-    FindPrevious: ['meta shift G'],
-    Replace: ['meta R'],
-    FindInPath: ['meta shift F'],
-    ReplaceInPath: ['meta shift R'],
-    PreviousTab: ['meta shift OPEN_BRACKET'],
-    NextTab: ['meta shift CLOSE_BRACKET'],
-    'Diff.PrevChange': ['meta shift OPEN_BRACKET'],
-    'Diff.NextChange': ['meta shift CLOSE_BRACKET'],
-    // Navigation
-    Exit: ['meta Q'],
-    NextWindow: ['meta BACK_QUOTE'],
-    PreviousWindow: ['meta shift BACK_QUOTE'],
-    ShowSettings: ['meta COMMA'],
-    ShowProjectStructureSettings: ['meta SEMICOLON'],
-};
-
 async function main() {
     const defaultXmlText = await requestDefaultKeymap();
     fs.writeFileSync('$default.xml', defaultXmlText);
@@ -85,12 +28,80 @@ async function main() {
     fs.writeFileSync('Windows-like for macOS.xml', customXmlText);
 }
 
+/**
+ * Represents how conflicting default shortcuts should be handled
+ * REMOVE if both alt and meta conflict, otherwise KEEP
+ */
+function getAltBlacklist(): { [actionId: string]: BlacklistAction } {
+    return {
+        $Undo: BlacklistAction.REMOVE, // alt BACK_SPACE
+        $Redo: BlacklistAction.REMOVE, // alt shift BACK_SPACE
+        PreviousTab: BlacklistAction.REMOVE, // alt LEFT
+        PreviousEditorTab: BlacklistAction.REMOVE, // alt shift LEFT
+        NextTab: BlacklistAction.REMOVE, // alt RIGHT
+        NextEditorTab: BlacklistAction.REMOVE, // alt shift RIGHT
+        'Diff.PrevChange': BlacklistAction.REMOVE, // alt LEFT
+        'Diff.NextChange': BlacklistAction.REMOVE, // alt RIGHT
+        'Diff.ApplyLeftSide': BlacklistAction.REMOVE, // alt shift RIGHT
+        'Diff.ApplyRightSide': BlacklistAction.REMOVE, // alt shift LEFT
+        'Vcs.QuickListPopupAction': BlacklistAction.KEEP, // alt BACK_QUOTE
+        EditorContextInfo: BlacklistAction.KEEP, // alt q
+    };
+}
+
+/**
+ * Returns additional shortcuts from "Mac OS X 10.5+.xml" and more for
+ * a more consistent text editor experience
+ */
+function getAdditionalMacShortcuts(): { [actionId: string]: string[] } {
+    return {
+        // Text editing
+        EditorPreviousWord: ['alt LEFT'],
+        EditorNextWord: ['alt RIGHT'],
+        EditorPreviousWordWithSelection: ['alt shift LEFT'],
+        EditorNextWordWithSelection: ['alt shift RIGHT'],
+        EditorDeleteToWordStart: ['alt BACK_SPACE'],
+        EditorDeleteToWordEnd: ['alt DELETE'],
+        EditorLineStart: ['meta LEFT'],
+        EditorLineEnd: ['meta RIGHT'],
+        EditorLineStartWithSelection: ['meta shift LEFT'],
+        EditorLineEndWithSelection: ['meta shift RIGHT'],
+        EditorDeleteLine: ['meta BACK_SPACE'],
+        // Editor actions
+        $Cut: ['meta X'],
+        $Copy: ['meta C'],
+        $Paste: ['meta V'],
+        $Undo: ['meta Z'],
+        $Redo: ['meta shift Z'],
+        $SelectAll: ['meta A'],
+        $Delete: ['BACK_SPACE', 'meta BACK_SPACE'],
+        Find: ['meta F'],
+        FindNext: ['meta G'],
+        FindPrevious: ['meta shift G'],
+        Replace: ['meta R'],
+        FindInPath: ['meta shift F'],
+        ReplaceInPath: ['meta shift R'],
+        PreviousTab: ['meta shift OPEN_BRACKET'],
+        NextTab: ['meta shift CLOSE_BRACKET'],
+        'Diff.PrevChange': ['meta shift OPEN_BRACKET'],
+        'Diff.NextChange': ['meta shift CLOSE_BRACKET'],
+        // Navigation
+        Exit: ['meta Q'],
+        NextWindow: ['meta BACK_QUOTE'],
+        PreviousWindow: ['meta shift BACK_QUOTE'],
+        ShowSettings: ['meta COMMA'],
+        ShowProjectStructureSettings: ['meta SEMICOLON'],
+    };
+}
+
 function modifyKeymapXml(xml: any): void {
     // Rename and add parent
     xml.keymap.$.name = 'Windows-like for macOS';
     xml.keymap.$.parent = '$default';
 
-    // Update the keymap
+    const additionalMacShortcuts = getAdditionalMacShortcuts();
+
+    // Modify existing keystrokes
     for (const action of xml.keymap.action) {
         const actionId = action.$.id;
         const keyboardShortcuts = action['keyboard-shortcut'];
@@ -104,11 +115,22 @@ function modifyKeymapXml(xml: any): void {
                 for (const keystroke of additionalKeystrokes) {
                     keyboardShortcuts.push({ $: { 'first-keystroke': keystroke } });
                 }
+                delete additionalMacShortcuts[actionId];
             }
         }
 
         if (mouseShortcuts) {
             processAltKeystrokes(actionId, mouseShortcuts, 'keystroke');
+        }
+    }
+
+    // Add any missing additional keystrokes
+    for (const [actionId, additionalKeystrokes] of Object.entries(additionalMacShortcuts)) {
+        for (const keystroke of additionalKeystrokes) {
+            xml.keymap.action.push({
+                $: { id: actionId },
+                'keyboard-shortcut': [{ $: { 'first-keystroke': keystroke } }],
+            });
         }
     }
 }
@@ -118,6 +140,7 @@ function processAltKeystrokes<T extends string>(
     shortcuts: Array<{ $: { [key in T]: string } }>,
     keystrokeId: T,
 ): void {
+    const altBlacklist = getAltBlacklist();
     for (let i = shortcuts.length - 1; i >= 0; i--) {
         const keystroke = shortcuts[i].$[keystrokeId];
 
