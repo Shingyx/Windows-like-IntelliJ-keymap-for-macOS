@@ -1,0 +1,30 @@
+{
+  "name": "windows-like-intellij-keymap-for-macos",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "check": "yarn tslint && yarn prettier",
+    "clean": "rimraf dist",
+    "format": "yarn tslint --fix && yarn prettier --write",
+    "prepare": "yarn build",
+    "prettier": "prettier --check \"src/**/*.ts\" \"*.md\"",
+    "test": "yarn build && yarn check",
+    "tslint": "tslint --project tsconfig.json"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0",
+    "xml2js": "^0.4.22"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.17",
+    "@types/xml2js": "^0.4.5",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.3"
+  }
+}
