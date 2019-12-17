@@ -9,11 +9,40 @@ enum BlacklistAction {
     KEEP,
 }
 
+interface IKeymapXml {
+    keymap: {
+        $: {
+            name: string;
+            version: string;
+            'disable-mnemonics': string;
+            parent?: string;
+        };
+        action: IKeymapXmlAction[];
+    };
+}
+
+interface IKeymapXmlAction {
+    $: {
+        id: string;
+    };
+    'keyboard-shortcut'?: Array<{
+        $: {
+            'first-keystroke': string;
+            'second-keystroke'?: string;
+        };
+    }>;
+    'mouse-shortcut'?: Array<{
+        $: {
+            keystroke: string;
+        };
+    }>;
+}
+
 async function main() {
     const defaultXmlText = await requestDefaultKeymap();
     fs.writeFileSync('$default.xml', defaultXmlText);
 
-    const xml = await xml2js.parseStringPromise(defaultXmlText);
+    const xml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
 
     console.log('XML BEFORE');
     console.log(JSON.stringify(xml, undefined, 2).slice(0, 1000));
@@ -92,7 +121,7 @@ function getAdditionalMacShortcuts(): { [actionId: string]: string[] } {
     };
 }
 
-function modifyKeymapXml(xml: any): void {
+function modifyKeymapXml(xml: IKeymapXml): void {
     // Rename and add parent
     xml.keymap.$.name = 'Windows-like for macOS';
     xml.keymap.$.parent = '$default';
