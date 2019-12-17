@@ -106,7 +106,7 @@ function modifyKeymapXml(xml: any): void {
         const mouseShortcuts = action['mouse-shortcut'];
 
         if (keyboardShortcuts) {
-            processAltKeystrokes(actionId, keyboardShortcuts, 'first-keystroke');
+            updateExistingKeystrokes(actionId, keyboardShortcuts, 'first-keystroke');
 
             const additionalKeystrokes = additionalMacShortcuts[actionId];
             if (additionalKeystrokes) {
@@ -118,7 +118,7 @@ function modifyKeymapXml(xml: any): void {
         }
 
         if (mouseShortcuts) {
-            processAltKeystrokes(actionId, mouseShortcuts, 'keystroke');
+            updateExistingKeystrokes(actionId, mouseShortcuts, 'keystroke');
         }
     }
 
@@ -133,7 +133,7 @@ function modifyKeymapXml(xml: any): void {
     }
 }
 
-function processAltKeystrokes<T extends string>(
+function updateExistingKeystrokes<T extends string>(
     actionId: string,
     shortcuts: Array<{ $: { [key in T]: string } }>,
     keystrokeId: T,
@@ -148,6 +148,10 @@ function processAltKeystrokes<T extends string>(
             } else {
                 shortcuts[i].$[keystrokeId] = keystroke.replace(/\balt\b/, 'meta');
             }
+        }
+
+        if (/\bINSERT\b/.test(keystroke)) {
+            shortcuts[i].$[keystrokeId] = keystroke.replace(/\bINSERT\b/, 'help');
         }
     }
 }
