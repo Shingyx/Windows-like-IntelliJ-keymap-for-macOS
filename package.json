@@ -6,12 +6,12 @@
   "scripts": {
     "prebuild": "yarn clean",
     "build": "tsc",
-    "check": "yarn tslint && yarn prettier",
+    "check-format": "yarn tslint && yarn prettier",
     "clean": "rimraf dist",
     "format": "yarn tslint --fix && yarn prettier --write",
     "prepare": "yarn build",
     "prettier": "prettier --check \"src/**/*.ts\" \"*.md\"",
-    "test": "yarn build && yarn check",
+    "test": "yarn build && yarn check-format",
     "tslint": "tslint --project tsconfig.json"
   },
   "dependencies": {
