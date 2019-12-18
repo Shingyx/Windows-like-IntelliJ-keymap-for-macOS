@@ -169,18 +169,21 @@ function updateExistingKeystrokes<T extends string>(
 ): void {
     const altBlacklist = getAltBlacklist();
     for (let i = shortcuts.length - 1; i >= 0; i--) {
-        const keystroke = shortcuts[i].$[keystrokeId];
+        const shortcut = shortcuts[i];
 
-        if (altBlacklist[actionId] !== BlacklistAction.KEEP && /\balt\b/.test(keystroke)) {
+        if (
+            altBlacklist[actionId] !== BlacklistAction.KEEP &&
+            /\balt\b/.test(shortcut.$[keystrokeId])
+        ) {
             if (altBlacklist[actionId] === BlacklistAction.REMOVE) {
                 shortcuts.splice(i, 1);
             } else {
-                shortcuts[i].$[keystrokeId] = keystroke.replace(/\balt\b/, 'meta');
+                shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\balt\b/, 'meta');
             }
         }
 
-        if (/\bINSERT\b/.test(keystroke)) {
-            shortcuts[i].$[keystrokeId] = keystroke.replace(/\bINSERT\b/, 'help');
+        if (/\bINSERT\b/.test(shortcut.$[keystrokeId])) {
+            shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\bINSERT\b/, 'help');
         }
     }
 }
