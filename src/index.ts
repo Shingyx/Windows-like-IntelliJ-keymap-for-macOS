@@ -52,8 +52,8 @@ async function main() {
 }
 
 /**
- * Represents how conflicting default shortcuts should be handled
- * REMOVE if both alt and meta conflict, otherwise KEEP
+ * Represents how conflicting default shortcuts should be handled.
+ * REMOVE if both alt and meta conflict, otherwise KEEP.
  */
 function getAltBlacklist(): { [actionId: string]: BlacklistAction } {
     return {
@@ -73,8 +73,8 @@ function getAltBlacklist(): { [actionId: string]: BlacklistAction } {
 }
 
 /**
- * Returns additional shortcuts from "Mac OS X 10.5+.xml" and more for
- * a more consistent text editor experience
+ * Returns additional shortcuts from "Mac OS X 10.5+.xml" and more,
+ * for a more consistent text editor experience.
  */
 function getAdditionalMacShortcuts(): { [actionId: string]: string[] } {
     return {
