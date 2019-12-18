@@ -8,7 +8,7 @@ Please note this project assumes that your keyboard has a Command key in place o
 
 The script performs three main tasks:
 
-* Updates every shortcut using the Alt modifier to use Command instead. Where there are conflicts, the shortcut is either removed, unchanged, or ported from the "Mac OS X 10.5+" keymap.
+* Updates every shortcut using the Alt modifier to use Command instead. Where there are conflicts, the shortcut is either removed, unchanged, or ported from the [Mac OS X 10.5+ IntelliJ keymap](https://github.com/JetBrains/intellij-community/blob/master/platform/platform-resources/src/keymaps/Mac%20OS%20X%2010.5%2B.xml).
 * Replaces the Insert key with the Help key. Insert on a full-sized keyboard is interpreted as Help on macOS.
 * Adds additional shortcuts which are common on macOS, such as Cmd+X/C/V to Cut/Copy/Paste, Cmd(+Shift)+Z to Undo/Redo, Cmd/Option+arrow keys to navigate to the start/end of words or lines, and more.
 
