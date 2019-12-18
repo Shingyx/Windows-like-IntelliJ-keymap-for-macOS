@@ -40,7 +40,6 @@ interface IKeymapXmlAction {
 
 async function main() {
     const defaultXmlText = await requestDefaultKeymap();
-    fs.writeFileSync('$default.xml', defaultXmlText);
 
     const xml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
 
@@ -49,6 +48,9 @@ async function main() {
     const xmlBuilder = new xml2js.Builder({ headless: true });
     const customXmlText = xmlBuilder.buildObject(xml);
     fs.writeFileSync('Windows-like for macOS.xml', customXmlText);
+
+    console.log(`Created "Windows-like for macOS.xml" in "${process.cwd()}".`);
+    console.log('Copy it to "~/Library/Preferences/<IDE-NAME>/keymaps" to use it.');
 }
 
 /**
