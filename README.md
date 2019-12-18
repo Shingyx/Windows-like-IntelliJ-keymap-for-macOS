@@ -15,3 +15,17 @@ The script performs three main tasks:
 Because all JetBrains IDEs are based on IntelliJ, the keymap should be compatible with all of them, including WebStorm and Android Studio. However, you may want to make small adjustments to the keymap afterwards for some shortcuts unique to specific IDEs.
 
 A version of this custom keymap is checked in and can be seen here: <https://github.com/Shingyx/windows-like-intellij-keymap-for-macos/blob/master/Windows-like%20for%20macOS.xml>.
+
+## Run it yourself
+
+Method 1: npx
+```
+npx github:shingyx/windows-like-intellij-keymap-for-macos
+```
+
+Method 2: Clone, build, run
+```
+git clone https://github.com/Shingyx/Windows-like-IntelliJ-keymap-for-macOS
+yarn        # install dependencies (also runs `yarn build` to build the project)
+node .      # run the main script
+```
