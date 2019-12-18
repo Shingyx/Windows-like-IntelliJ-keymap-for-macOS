@@ -44,13 +44,7 @@ async function main() {
 
     const xml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
 
-    console.log('XML BEFORE');
-    console.log(JSON.stringify(xml, undefined, 2).slice(0, 1000));
-
     modifyKeymapXml(xml);
-
-    console.log('XML AFTER');
-    console.log(JSON.stringify(xml, undefined, 2).slice(0, 1000));
 
     const xmlBuilder = new xml2js.Builder({ headless: true });
     const customXmlText = xmlBuilder.buildObject(xml);
