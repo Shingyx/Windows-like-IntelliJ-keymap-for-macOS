@@ -25,17 +25,17 @@ interface IKeymapXmlAction {
     $: {
         id: string;
     };
-    'keyboard-shortcut'?: Array<{
+    'keyboard-shortcut'?: {
         $: {
             'first-keystroke': string;
             'second-keystroke'?: string;
         };
-    }>;
-    'mouse-shortcut'?: Array<{
+    }[];
+    'mouse-shortcut'?: {
         $: {
             keystroke: string;
         };
-    }>;
+    }[];
 }
 
 async function main() {
@@ -162,7 +162,7 @@ function modifyKeymapXml(xml: IKeymapXml): void {
 
 function updateExistingKeystrokes<T extends string>(
     actionId: string,
-    shortcuts: Array<{ $: { [key in T]: string } }>,
+    shortcuts: { $: { [key in T]: string } }[],
     keystrokeId: T,
 ): void {
     const altBlacklist = getAltBlacklist();
