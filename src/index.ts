@@ -71,6 +71,7 @@ function getAltBlacklist(): { [actionId: string]: BlacklistAction } {
         'Diff.ApplyRightSide': BlacklistAction.REMOVE, // alt shift LEFT
         'Vcs.QuickListPopupAction': BlacklistAction.KEEP, // alt BACK_QUOTE
         EditorContextInfo: BlacklistAction.KEEP, // alt q
+        EditorAddCaretPerSelectedLine: BlacklistAction.KEEP, // alt shift G
     };
 }
 
@@ -110,6 +111,7 @@ function getAdditionalMacShortcuts(): { [actionId: string]: string[] } {
         'Diff.NextChange': ['meta shift CLOSE_BRACKET'],
         // Navigation
         Exit: ['meta Q'],
+        CloseContent: ['meta W'],
         NextWindow: ['meta BACK_QUOTE'],
         PreviousWindow: ['meta shift BACK_QUOTE'],
         ShowSettings: ['meta COMMA'],
