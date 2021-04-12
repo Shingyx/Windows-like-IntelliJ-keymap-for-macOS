@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-Take the file <https://github.com/Shingyx/windows-like-intellij-keymap-for-macos/blob/master/Windows-like%20for%20macOS.xml> and place it inside "~/Library/Preferences/\<IDE-NAME>/keymaps".
+Take the file <https://github.com/Shingyx/windows-like-intellij-keymap-for-macos/blob/master/Windows-like%20for%20macOS.xml> and place it inside "~/Library/Application Support/JetBrains/\<IDE-NAME>/keymaps".
 
 ## Overview
 

@@ -2,6 +2,28 @@
   <action id="ShowNavBar">
     <keyboard-shortcut first-keystroke="meta HOME"/>
   </action>
+  <action id="OpenInRightSplit">
+    <keyboard-shortcut first-keystroke="shift ENTER"/>
+    <mouse-shortcut keystroke="meta button1 doubleClick"/>
+  </action>
+  <action id="SplitChooser">
+    <keyboard-shortcut first-keystroke="meta shift ENTER"/>
+  </action>
+  <action id="SplitChooser.NextWindow">
+    <keyboard-shortcut first-keystroke="TAB"/>
+  </action>
+  <action id="SplitChooser.PreviousWindow">
+    <keyboard-shortcut first-keystroke="shift TAB"/>
+  </action>
+  <action id="SplitChooser.Split">
+    <keyboard-shortcut first-keystroke="ENTER"/>
+  </action>
+  <action id="SplitChooser.Duplicate">
+    <keyboard-shortcut first-keystroke="ctrl ENTER"/>
+  </action>
+  <action id="SplitChooser.SplitCenter">
+    <keyboard-shortcut first-keystroke="SPACE"/>
+  </action>
   <action id="FileChooser.TogglePathShowing">
     <keyboard-shortcut first-keystroke="control P"/>
   </action>
@@ -91,6 +113,9 @@
   </action>
   <action id="MethodOverloadSwitchDown">
     <keyboard-shortcut first-keystroke="control DOWN"/>
+  </action>
+  <action id="CloseGotItTooltip">
+    <keyboard-shortcut first-keystroke="ESCAPE"/>
   </action>
   <action id="ReformatCode">
     <keyboard-shortcut first-keystroke="control meta L"/>
@@ -988,7 +1013,7 @@
     <keyboard-shortcut first-keystroke="meta DELETE"/>
   </action>
   <action id="SelectVirtualTemplateElement">
-    <keyboard-shortcut first-keystroke="TAB"/>
+    <keyboard-shortcut first-keystroke="Alt Shift O"/>
   </action>
   <action id="NextTemplateVariable">
     <keyboard-shortcut first-keystroke="TAB"/>
@@ -1209,9 +1234,6 @@
   <action id="ServiceView.GroupByServiceGroups">
     <keyboard-shortcut first-keystroke="control meta P"/>
   </action>
-  <action id="ViewInplaceComments">
-    <keyboard-shortcut first-keystroke="meta shift BACK_SLASH"/>
-  </action>
   <action id="ToggleFindInSelection">
     <keyboard-shortcut first-keystroke="control meta E"/>
   </action>
@@ -1233,8 +1255,14 @@
   <action id="UsageGrouping.DirectoryStructure">
     <keyboard-shortcut first-keystroke="control meta D"/>
   </action>
-  <action id="UsageGrouping.Package">
-    <keyboard-shortcut first-keystroke="control meta P"/>
+  <action id="SwitchHeaderSource">
+    <keyboard-shortcut first-keystroke="F10"/>
+  </action>
+  <action id="ActivateUnitTestsToolWindow">
+    <keyboard-shortcut first-keystroke="meta shift 8"/>
+  </action>
+  <action id="ActivateNuGetToolWindow">
+    <keyboard-shortcut first-keystroke="meta shift 7"/>
   </action>
   <action id="Exit">
     <keyboard-shortcut first-keystroke="meta Q"/>
