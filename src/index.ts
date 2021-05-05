@@ -50,7 +50,7 @@ async function main() {
     fs.writeFileSync('Windows-like for macOS.xml', customXmlText);
 
     console.log(`Created "Windows-like for macOS.xml" in "${process.cwd()}".`);
-    console.log('Copy it to "~/Library/Preferences/<IDE-NAME>/keymaps" to use it.');
+    console.log('Copy it to "~/Library/Application Support/JetBrains/<IDE-NAME>/keymaps" to use it.');
 }
 
 /**
@@ -109,6 +109,11 @@ function getAdditionalMacShortcuts(): { [actionId: string]: string[] } {
         NextTab: ['meta shift CLOSE_BRACKET'],
         'Diff.PrevChange': ['meta shift OPEN_BRACKET'],
         'Diff.NextChange': ['meta shift CLOSE_BRACKET'],
+        'UsageView.Include': ['shift BACK_SPACE'],
+        Generate: ['meta N'],
+        NewElement: ['meta N'],
+        NewElementSamePlace: ['control alt N'],
+        NewScratchFile:['meta shift N'],
         // Navigation
         Exit: ['meta Q'],
         CloseContent: ['meta W'],

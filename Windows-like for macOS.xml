@@ -89,6 +89,7 @@
   </action>
   <action id="UsageView.Include">
     <keyboard-shortcut first-keystroke="help"/>
+    <keyboard-shortcut first-keystroke="shift BACK_SPACE"/>
   </action>
   <action id="EditorJoinLines">
     <keyboard-shortcut first-keystroke="control shift J"/>
@@ -125,6 +126,7 @@
   </action>
   <action id="Generate">
     <keyboard-shortcut first-keystroke="meta help"/>
+    <keyboard-shortcut first-keystroke="meta N"/>
   </action>
   <action id="EditorChooseLookupItemReplace">
     <keyboard-shortcut first-keystroke="TAB"/>
@@ -963,9 +965,11 @@
   </action>
   <action id="NewElement">
     <keyboard-shortcut first-keystroke="meta help"/>
+    <keyboard-shortcut first-keystroke="meta N"/>
   </action>
   <action id="NewElementSamePlace">
     <keyboard-shortcut first-keystroke="control meta help"/>
+    <keyboard-shortcut first-keystroke="control alt N"/>
   </action>
   <action id="EditorSplitLine">
     <keyboard-shortcut first-keystroke="control ENTER"/>
@@ -1153,6 +1157,7 @@
   </action>
   <action id="NewScratchFile">
     <keyboard-shortcut first-keystroke="control meta shift help"/>
+    <keyboard-shortcut first-keystroke="meta shift N"/>
   </action>
   <action id="EditorMatchBrace">
     <keyboard-shortcut first-keystroke="control shift M"/>
