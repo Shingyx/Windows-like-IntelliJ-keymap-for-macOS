@@ -10,7 +10,7 @@ A node script to generate a Windows-like keymap for all of your JetBrains IDEs o
 
 The IntelliJ default keymap can be found here: <https://github.com/JetBrains/intellij-community/blob/master/platform/platform-resources/src/keymaps/%24default.xml>.
 
-Please note this project assumes that your keyboard has a Command key in place of the Alt key and an Option key in place of the Windows key.
+Please note that this project assumes your keyboard is of the Mac layout, where the bottom row starts with "Ctrl -> Option -> Cmd". Alternatively, take a keyboard where the bottom row starts with "Ctrl -> Win -> Alt" and swap the Win and Alt inputs using the OS or Karabiner-Elements.
 
 The script performs three main tasks:
 
