@@ -1,0 +1,31 @@
+name: Auto regenerate keymap
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'yarn'
+
+      - run: yarn --frozen-lockfile
+
+      - run: node .
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Regenerate keymap
+          branch: auto-regen
+          delete-branch: true
+          title: Regenerate keymap
+          labels: bot
