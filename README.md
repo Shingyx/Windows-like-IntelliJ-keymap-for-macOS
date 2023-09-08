@@ -14,9 +14,9 @@ Please note that this project assumes your keyboard is of the Mac layout, where 
 
 The script performs three main tasks:
 
--   Updates every shortcut using the Alt modifier to use Command instead. Where there are conflicts, the shortcut is either removed, unchanged, or ported from the [Mac OS X 10.5+ IntelliJ keymap](https://github.com/JetBrains/intellij-community/blob/master/platform/platform-resources/src/keymaps/Mac%20OS%20X%2010.5%2B.xml).
--   Replaces the Insert key with the Help key. Insert on a full-sized keyboard is interpreted as Help on macOS.
--   Adds additional shortcuts which are common on macOS, such as Cmd+X/C/V to Cut/Copy/Paste, Cmd(+Shift)+Z to Undo/Redo, Cmd/Option+arrow keys to navigate to the start/end of words or lines, and more.
+- Updates every shortcut using the Alt modifier to use Command instead. Where there are conflicts, the shortcut is either removed, unchanged, or ported from the [Mac OS X 10.5+ IntelliJ keymap](https://github.com/JetBrains/intellij-community/blob/master/platform/platform-resources/src/keymaps/Mac%20OS%20X%2010.5%2B.xml).
+- Replaces the Insert key with the Help key. Insert on a full-sized keyboard is interpreted as Help on macOS.
+- Adds additional shortcuts which are common on macOS, such as Cmd+X/C/V to Cut/Copy/Paste, Cmd(+Shift)+Z to Undo/Redo, Cmd/Option+arrow keys to navigate to the start/end of words or lines, and more.
 
 Because all JetBrains IDEs are based on IntelliJ, the keymap should be compatible with all of them, including WebStorm and Android Studio. However, you may want to make small adjustments to the keymap afterwards for some shortcuts unique to specific IDEs.
 

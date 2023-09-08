@@ -1,31 +1,37 @@
 {
   "name": "windows-like-intellij-keymap-for-macos",
   "version": "1.0.0",
+  "repository": "https://github.com/Shingyx/Windows-like-IntelliJ-keymap-for-macOS",
+  "license": "MIT",
   "main": "dist/index.js",
   "bin": "dist/index.js",
-  "license": "MIT",
   "scripts": {
     "prebuild": "yarn clean",
     "build": "tsc",
-    "check-format": "yarn tslint && yarn prettier",
     "clean": "rimraf dist",
-    "format": "yarn tslint --fix && yarn prettier --write",
+    "fix": "yarn lint:fix && yarn format",
+    "format": "yarn format:check --write",
+    "format:check": "prettier --check \"./**/*.{json,md,ts,yml}\" --ignore-path .gitignore",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build",
-    "prettier": "prettier --check \"src/**/*.ts\" \"*.md\"",
-    "test": "yarn build && yarn check-format",
-    "tslint": "tslint --project tsconfig.json"
+    "prepublishOnly": "yarn run-checks",
+    "run-checks": "yarn lint && yarn format:check"
   },
   "dependencies": {
-    "tslib": "^2.0.1",
-    "xml2js": "^0.5.0"
+    "tslib": "^2.6.2",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "@types/node": "^14.0.27",
-    "@types/xml2js": "^0.4.5",
-    "prettier": "^2.0.5",
-    "rimraf": "^3.0.2",
-    "tslint": "^6.1.3",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.7"
+    "@types/node": "^20.5.9",
+    "@types/xml2js": "^0.4.12",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.2.2"
   }
 }
