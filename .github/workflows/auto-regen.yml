@@ -19,7 +19,7 @@ jobs:
 
       - run: yarn --frozen-lockfile
 
-      - run: node .
+      - run: yarn regen-keymap
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5

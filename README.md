@@ -32,6 +32,6 @@ Method 2: Clone, build, run
 
 ```
 git clone https://github.com/Shingyx/Windows-like-IntelliJ-keymap-for-macOS
-yarn        # install dependencies (also runs `yarn build` to build the project)
-node .      # run the main script
+yarn               # install dependencies (also runs `yarn build`)
+yarn regen-keymap  # run the script
 ```
