@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
+import path from 'path';
 
 import { regenKeymap } from '.';
 
 async function main() {
   const keymapXmlText = await regenKeymap();
 
-  fs.writeFileSync('Windows-like for macOS.xml', keymapXmlText);
+  const outputDir = path.resolve('output');
+  const filename = 'Windows-like for macOS.xml';
 
-  console.log(`Created "Windows-like for macOS.xml" in "${process.cwd()}".`);
+  fs.writeFileSync(path.join(outputDir, filename), keymapXmlText);
+
+  console.log(`Created "${filename}" in "${outputDir}".`);
   console.log('Copy it to "~/Library/Application Support/JetBrains/<IDE-NAME>/keymaps" to use it.');
 }
 
