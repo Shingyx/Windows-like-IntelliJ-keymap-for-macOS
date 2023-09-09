@@ -22,14 +22,6 @@ Because all JetBrains IDEs are based on IntelliJ, the keymap should be compatibl
 
 ## Run it yourself
 
-Method 1: npx
-
-```
-npx github:shingyx/windows-like-intellij-keymap-for-macos
-```
-
-Method 2: Clone, build, run
-
 ```
 git clone https://github.com/Shingyx/Windows-like-IntelliJ-keymap-for-macOS
 yarn               # install dependencies (also runs `yarn build`)
