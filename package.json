@@ -4,7 +4,7 @@
   "repository": "https://github.com/Shingyx/Windows-like-IntelliJ-keymap-for-macOS",
   "license": "MIT",
   "main": "dist/index.js",
-  "bin": "dist/index.js",
+  "bin": "dist/cli.js",
   "scripts": {
     "prebuild": "yarn clean",
     "build": "tsc",
@@ -16,6 +16,7 @@
     "lint:fix": "yarn lint --fix",
     "prepare": "yarn build",
     "prepublishOnly": "yarn run-checks",
+    "regen-keymap": "node dist/cli.js",
     "run-checks": "yarn lint && yarn format:check"
   },
   "dependencies": {
