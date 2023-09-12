@@ -78,7 +78,7 @@ function processAction(action: IKeymapXmlAction): IKeymapXmlAction {
   if (action['mouse-shortcut']) {
     result['mouse-shortcut'] = [];
     for (const shortcut of action['mouse-shortcut']) {
-      const keystroke = processKeystroke(actionId, shortcut.$.keystroke);
+      const keystroke = processKeystroke(actionId, shortcut.$.keystroke, true);
       if (!keystroke) {
         continue;
       }
@@ -91,22 +91,70 @@ function processAction(action: IKeymapXmlAction): IKeymapXmlAction {
   return result;
 }
 
-function processKeystroke(actionId: string, keystroke: string | undefined): string | undefined {
+function processKeystroke(
+  actionId: string,
+  keystroke: string | undefined,
+  isMouse?: boolean,
+): string | undefined {
   if (!keystroke) {
     return;
   }
-  keystroke = keystroke.toLowerCase();
-  if (/\balt\b/.test(keystroke)) {
-    if (altConflicts[actionId] === ConflictAction.REMOVE) {
-      return;
-    }
-    if (altConflicts[actionId] == null) {
-      keystroke = keystroke.replace(/\balt\b/, 'meta');
+  const { shift, ctrl, alt, keys } = parseKeystroke(keystroke);
+
+  if (alt && altConflicts[actionId] === ConflictAction.REMOVE) {
+    return;
+  }
+
+  const outputKeys = [];
+  if (shift) {
+    outputKeys.push('shift');
+  }
+  if (ctrl) {
+    // Mouse shortcuts use "control" instead of "ctrl" for some reason
+    outputKeys.push(isMouse ? 'control' : 'ctrl');
+  }
+  if (alt) {
+    if (altConflicts[actionId] === ConflictAction.KEEP) {
+      outputKeys.push('alt');
+    } else {
+      outputKeys.push('meta');
     }
   }
-  keystroke = keystroke.replace(/\binsert\b/, 'help');
-  keystroke = keystroke.replace(/\bcontrol\b/, 'ctrl');
-  return keystroke;
+  for (const key of keys) {
+    if (key === 'insert') {
+      outputKeys.push('help');
+    } else if (key === 'doubleclick') {
+      outputKeys.push('doubleClick');
+    } else {
+      outputKeys.push(key);
+    }
+  }
+  return outputKeys.join(' ');
+}
+
+function parseKeystroke(keystroke: string): {
+  shift: boolean;
+  ctrl: boolean;
+  alt: boolean;
+  keys: string[];
+} {
+  let shift = false;
+  let ctrl = false;
+  let alt = false;
+  const keys: string[] = [];
+
+  for (const key of keystroke.toLowerCase().split(' ')) {
+    if (key === 'shift') {
+      shift = true;
+    } else if (key === 'control' || key === 'ctrl') {
+      ctrl = true;
+    } else if (key === 'alt') {
+      alt = true;
+    } else {
+      keys.push(key);
+    }
+  }
+  return { shift, ctrl, alt, keys };
 }
 
 async function fetchDefaultKeymap(): Promise<string> {
