@@ -2,83 +2,159 @@ import https from 'https';
 import xml2js from 'xml2js';
 
 import { additionalMacShortcuts, altConflicts } from './config';
-import { ConflictAction, IKeymapXml } from './interfaces';
+import { ConflictAction, IKeymapXml, IKeymapXmlAction } from './interfaces';
 
 export async function regenKeymap(): Promise<string> {
   const defaultXmlText = await fetchDefaultKeymap();
 
-  const xml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
+  const inputXml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
 
-  modifyKeymapXml(xml);
+  const processedXml = processKeymapXml(inputXml);
 
   const xmlBuilder = new xml2js.Builder({ headless: true });
-  return xmlBuilder.buildObject(xml);
+  let outputXmlText = xmlBuilder.buildObject(processedXml);
+  // Add spaces before closing tags
+  outputXmlText = outputXmlText.replace(/"\/>\n/g, '" />\n');
+  return outputXmlText;
 }
 
-function modifyKeymapXml(xml: IKeymapXml): void {
-  // Rename and add parent
-  xml.keymap.$.name = 'Windows-like for macOS';
-  xml.keymap.$.parent = '$default';
+function processKeymapXml(xml: IKeymapXml): IKeymapXml {
+  const actionMap: { [actionId: string]: IKeymapXmlAction } = {};
 
   // Modify existing keystrokes
-  const processedActionIds = new Set<string>();
   for (const action of xml.keymap.action) {
     const actionId = action.$.id;
-    const keyboardShortcuts = action['keyboard-shortcut'];
-    const mouseShortcuts = action['mouse-shortcut'];
-
-    if (keyboardShortcuts) {
-      processExistingKeystrokes(actionId, keyboardShortcuts, 'first-keystroke');
-
-      const additionalKeystrokes = additionalMacShortcuts[actionId];
-      if (additionalKeystrokes) {
-        for (const keystroke of additionalKeystrokes) {
-          keyboardShortcuts.push({ $: { 'first-keystroke': keystroke } });
-        }
-      }
-    }
-
-    if (mouseShortcuts) {
-      processExistingKeystrokes(actionId, mouseShortcuts, 'keystroke');
-    }
-
-    processedActionIds.add(actionId);
+    actionMap[actionId] = processAction(action);
   }
 
-  // Add any missing additional keystrokes
+  // Add additional keystrokes
   for (const [actionId, additionalKeystrokes] of Object.entries(additionalMacShortcuts)) {
-    if (processedActionIds.has(actionId)) {
-      continue;
+    let action = actionMap[actionId];
+    if (!action) {
+      action = { $: { id: actionId } };
+      actionMap[actionId] = action;
+    }
+    if (!action['keyboard-shortcut']) {
+      action['keyboard-shortcut'] = [];
     }
     for (const keystroke of additionalKeystrokes) {
-      xml.keymap.action.push({
-        $: { id: actionId },
-        'keyboard-shortcut': [{ $: { 'first-keystroke': keystroke } }],
+      action['keyboard-shortcut'].push({ $: { 'first-keystroke': keystroke } });
+    }
+  }
+
+  // Sort by actionId
+  const sortedActions = Object.keys(actionMap)
+    .sort()
+    .map((actionId) => actionMap[actionId]);
+
+  return {
+    keymap: {
+      $: { version: '1', name: 'Windows-like for macOS', parent: '$default' },
+      action: sortedActions,
+    },
+  };
+}
+
+function processAction(action: IKeymapXmlAction): IKeymapXmlAction {
+  const actionId = action.$.id;
+  const result: IKeymapXmlAction = {
+    $: { id: actionId },
+  };
+
+  if (action['keyboard-shortcut']) {
+    result['keyboard-shortcut'] = [];
+    for (const shortcut of action['keyboard-shortcut']) {
+      const firstKeystroke = processKeystroke(actionId, shortcut.$['first-keystroke']);
+      if (!firstKeystroke) {
+        continue;
+      }
+      const secondKeystroke = processKeystroke(actionId, shortcut.$['second-keystroke']);
+      result['keyboard-shortcut'].push({
+        $: { 'first-keystroke': firstKeystroke, 'second-keystroke': secondKeystroke },
       });
     }
   }
-}
 
-function processExistingKeystrokes<T extends string>(
-  actionId: string,
-  shortcuts: { $: { [key in T]: string } }[],
-  keystrokeId: T,
-): void {
-  for (let i = shortcuts.length - 1; i >= 0; i--) {
-    const shortcut = shortcuts[i];
-
-    if (/\balt\b/.test(shortcut.$[keystrokeId])) {
-      if (altConflicts[actionId] == null) {
-        shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\balt\b/, 'meta');
-      } else if (altConflicts[actionId] === ConflictAction.REMOVE) {
-        shortcuts.splice(i, 1);
+  if (action['mouse-shortcut']) {
+    result['mouse-shortcut'] = [];
+    for (const shortcut of action['mouse-shortcut']) {
+      const keystroke = processKeystroke(actionId, shortcut.$.keystroke, true);
+      if (!keystroke) {
+        continue;
       }
-    }
-
-    if (/\bINSERT\b/.test(shortcut.$[keystrokeId])) {
-      shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\bINSERT\b/, 'help');
+      result['mouse-shortcut'].push({
+        $: { keystroke: keystroke },
+      });
     }
   }
+
+  return result;
+}
+
+function processKeystroke(
+  actionId: string,
+  keystroke: string | undefined,
+  isMouse?: boolean,
+): string | undefined {
+  if (!keystroke) {
+    return;
+  }
+  const { shift, ctrl, alt, keys } = parseKeystroke(keystroke);
+
+  if (alt && altConflicts[actionId] === ConflictAction.REMOVE) {
+    return;
+  }
+
+  const outputKeys = [];
+  if (shift) {
+    outputKeys.push('shift');
+  }
+  if (ctrl) {
+    // Mouse shortcuts use "control" instead of "ctrl" for some reason
+    outputKeys.push(isMouse ? 'control' : 'ctrl');
+  }
+  if (alt) {
+    if (altConflicts[actionId] === ConflictAction.KEEP) {
+      outputKeys.push('alt');
+    } else {
+      outputKeys.push('meta');
+    }
+  }
+  for (const key of keys) {
+    if (key === 'insert') {
+      outputKeys.push('help');
+    } else if (key === 'doubleclick') {
+      outputKeys.push('doubleClick');
+    } else {
+      outputKeys.push(key);
+    }
+  }
+  return outputKeys.join(' ');
+}
+
+function parseKeystroke(keystroke: string): {
+  shift: boolean;
+  ctrl: boolean;
+  alt: boolean;
+  keys: string[];
+} {
+  let shift = false;
+  let ctrl = false;
+  let alt = false;
+  const keys: string[] = [];
+
+  for (const key of keystroke.toLowerCase().split(' ')) {
+    if (key === 'shift') {
+      shift = true;
+    } else if (key === 'control' || key === 'ctrl') {
+      ctrl = true;
+    } else if (key === 'alt') {
+      alt = true;
+    } else {
+      keys.push(key);
+    }
+  }
+  return { shift, ctrl, alt, keys };
 }
 
 async function fetchDefaultKeymap(): Promise<string> {
