@@ -2,61 +2,66 @@ import https from 'https';
 import xml2js from 'xml2js';
 
 import { additionalMacShortcuts, altConflicts } from './config';
-import { ConflictAction, IKeymapXml } from './interfaces';
+import { ConflictAction, IKeymapXml, IKeymapXmlAction } from './interfaces';
 
 export async function regenKeymap(): Promise<string> {
   const defaultXmlText = await fetchDefaultKeymap();
 
-  const xml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
+  const inputXml: IKeymapXml = await xml2js.parseStringPromise(defaultXmlText);
 
-  modifyKeymapXml(xml);
+  const processedXml = processKeymapXml(inputXml);
 
   const xmlBuilder = new xml2js.Builder({ headless: true });
-  return xmlBuilder.buildObject(xml);
+  let outputXmlText = xmlBuilder.buildObject(processedXml);
+  // Add spaces before closing tags
+  outputXmlText = outputXmlText.replace(/"\/>\n/g, '" />\n');
+  return outputXmlText;
 }
 
-function modifyKeymapXml(xml: IKeymapXml): void {
-  // Rename and add parent
-  xml.keymap.$.name = 'Windows-like for macOS';
-  xml.keymap.$.parent = '$default';
+function processKeymapXml(xml: IKeymapXml): IKeymapXml {
+  const actionMap: { [actionId: string]: IKeymapXmlAction } = {};
 
   // Modify existing keystrokes
-  const processedActionIds = new Set<string>();
   for (const action of xml.keymap.action) {
     const actionId = action.$.id;
-    const keyboardShortcuts = action['keyboard-shortcut'];
-    const mouseShortcuts = action['mouse-shortcut'];
 
-    if (keyboardShortcuts) {
-      processExistingKeystrokes(actionId, keyboardShortcuts, 'first-keystroke');
-
-      const additionalKeystrokes = additionalMacShortcuts[actionId];
-      if (additionalKeystrokes) {
-        for (const keystroke of additionalKeystrokes) {
-          keyboardShortcuts.push({ $: { 'first-keystroke': keystroke } });
-        }
-      }
+    if (action['keyboard-shortcut']) {
+      processExistingKeystrokes(actionId, action['keyboard-shortcut'], 'first-keystroke');
     }
 
-    if (mouseShortcuts) {
-      processExistingKeystrokes(actionId, mouseShortcuts, 'keystroke');
+    if (action['mouse-shortcut']) {
+      processExistingKeystrokes(actionId, action['mouse-shortcut'], 'keystroke');
     }
 
-    processedActionIds.add(actionId);
+    actionMap[actionId] = action;
   }
 
-  // Add any missing additional keystrokes
+  // Add additional keystrokes
   for (const [actionId, additionalKeystrokes] of Object.entries(additionalMacShortcuts)) {
-    if (processedActionIds.has(actionId)) {
-      continue;
+    let action = actionMap[actionId];
+    if (!action) {
+      action = { $: { id: actionId } };
+      actionMap[actionId] = action;
+    }
+    if (!action['keyboard-shortcut']) {
+      action['keyboard-shortcut'] = [];
     }
     for (const keystroke of additionalKeystrokes) {
-      xml.keymap.action.push({
-        $: { id: actionId },
-        'keyboard-shortcut': [{ $: { 'first-keystroke': keystroke } }],
-      });
+      action['keyboard-shortcut'].push({ $: { 'first-keystroke': keystroke } });
     }
   }
+
+  // Sort by actionId
+  const sortedActions = Object.keys(actionMap)
+    .sort()
+    .map((actionId) => actionMap[actionId]);
+
+  return {
+    keymap: {
+      $: { version: '1', name: 'Windows-like for macOS', parent: '$default' },
+      action: sortedActions,
+    },
+  };
 }
 
 function processExistingKeystrokes<T extends string>(

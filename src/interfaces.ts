@@ -8,7 +8,7 @@ export interface IKeymapXml {
     $: {
       name: string;
       version: string;
-      'disable-mnemonics': string;
+      'disable-mnemonics'?: string;
       parent?: string;
     };
     action: IKeymapXmlAction[];
