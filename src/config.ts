@@ -5,19 +5,19 @@ import { ConflictAction } from './interfaces';
  * REMOVE if both alt and meta conflict, otherwise KEEP.
  */
 export const altConflicts: { [actionId: string]: ConflictAction } = {
-  $Undo: ConflictAction.REMOVE, // alt BACK_SPACE
-  $Redo: ConflictAction.REMOVE, // alt shift BACK_SPACE
-  PreviousTab: ConflictAction.REMOVE, // alt LEFT
-  PreviousEditorTab: ConflictAction.REMOVE, // alt shift LEFT
-  NextTab: ConflictAction.REMOVE, // alt RIGHT
-  NextEditorTab: ConflictAction.REMOVE, // alt shift RIGHT
-  'Diff.PrevChange': ConflictAction.REMOVE, // alt LEFT
-  'Diff.NextChange': ConflictAction.REMOVE, // alt RIGHT
-  'Diff.ApplyLeftSide': ConflictAction.REMOVE, // alt shift RIGHT
-  'Diff.ApplyRightSide': ConflictAction.REMOVE, // alt shift LEFT
-  'Vcs.QuickListPopupAction': ConflictAction.KEEP, // alt BACK_QUOTE
+  $Undo: ConflictAction.REMOVE, // alt back_space
+  $Redo: ConflictAction.REMOVE, // shift alt back_space
+  PreviousTab: ConflictAction.REMOVE, // alt left
+  PreviousEditorTab: ConflictAction.REMOVE, // shift alt left
+  NextTab: ConflictAction.REMOVE, // alt right
+  NextEditorTab: ConflictAction.REMOVE, // shift alt right
+  'Diff.PrevChange': ConflictAction.REMOVE, // alt left
+  'Diff.NextChange': ConflictAction.REMOVE, // alt right
+  'Diff.ApplyLeftSide': ConflictAction.REMOVE, // shift alt right
+  'Diff.ApplyRightSide': ConflictAction.REMOVE, // shift alt left
+  'Vcs.QuickListPopupAction': ConflictAction.KEEP, // alt back_quote
   EditorContextInfo: ConflictAction.KEEP, // alt q
-  EditorAddCaretPerSelectedLine: ConflictAction.KEEP, // alt shift G
+  EditorAddCaretPerSelectedLine: ConflictAction.KEEP, // shift alt g
 };
 
 /**
@@ -26,43 +26,43 @@ export const altConflicts: { [actionId: string]: ConflictAction } = {
  */
 export const additionalMacShortcuts: { [actionId: string]: string[] } = {
   // Text editing
-  EditorPreviousWord: ['alt LEFT'],
-  EditorNextWord: ['alt RIGHT'],
-  EditorPreviousWordWithSelection: ['alt shift LEFT'],
-  EditorNextWordWithSelection: ['alt shift RIGHT'],
-  EditorDeleteToWordStart: ['alt BACK_SPACE'],
-  EditorDeleteToWordEnd: ['alt DELETE'],
-  EditorLineStart: ['meta LEFT'],
-  EditorLineEnd: ['meta RIGHT'],
-  EditorLineStartWithSelection: ['meta shift LEFT'],
-  EditorLineEndWithSelection: ['meta shift RIGHT'],
-  EditorDeleteLine: ['meta BACK_SPACE'],
+  EditorPreviousWord: ['alt left'],
+  EditorNextWord: ['alt right'],
+  EditorPreviousWordWithSelection: ['shift alt left'],
+  EditorNextWordWithSelection: ['shift alt right'],
+  EditorDeleteToWordStart: ['alt back_space'],
+  EditorDeleteToWordEnd: ['alt delete'],
+  EditorLineStart: ['meta left'],
+  EditorLineEnd: ['meta right'],
+  EditorLineStartWithSelection: ['shift meta left'],
+  EditorLineEndWithSelection: ['shift meta right'],
+  EditorDeleteLine: ['meta back_space'],
   // Editor actions
-  $Cut: ['meta X'],
-  $Copy: ['meta C'],
-  $Paste: ['meta V'],
-  $Undo: ['meta Z'],
-  $Redo: ['meta shift Z'],
-  $SelectAll: ['meta A'],
-  $Delete: ['BACK_SPACE', 'meta BACK_SPACE'],
-  Find: ['meta F'],
-  FindNext: ['meta G'],
-  FindPrevious: ['meta shift G'],
-  FindInPath: ['meta shift F'],
-  PreviousTab: ['meta shift OPEN_BRACKET'],
-  NextTab: ['meta shift CLOSE_BRACKET'],
-  'Diff.PrevChange': ['meta shift OPEN_BRACKET'],
-  'Diff.NextChange': ['meta shift CLOSE_BRACKET'],
-  'UsageView.Include': ['shift BACK_SPACE'],
-  Generate: ['meta N'],
-  NewElement: ['meta N'],
-  NewElementSamePlace: ['control alt N'],
-  NewScratchFile: ['meta shift N'],
+  $Cut: ['meta x'],
+  $Copy: ['meta c'],
+  $Paste: ['meta v'],
+  $Undo: ['meta z'],
+  $Redo: ['shift meta z'],
+  $SelectAll: ['meta a'],
+  $Delete: ['back_space', 'meta back_space'],
+  Find: ['meta f'],
+  FindNext: ['meta g'],
+  FindPrevious: ['shift meta g'],
+  FindInPath: ['shift meta f'],
+  PreviousTab: ['shift meta open_bracket'],
+  NextTab: ['shift meta close_bracket'],
+  'Diff.PrevChange': ['shift meta open_bracket'],
+  'Diff.NextChange': ['shift meta close_bracket'],
+  'UsageView.Include': ['shift back_space'],
+  Generate: ['meta n'],
+  NewElement: ['meta n'],
+  NewElementSamePlace: ['ctrl alt n'],
+  NewScratchFile: ['shift meta n'],
   // Navigation
-  Exit: ['meta Q'],
-  CloseContent: ['meta W'],
-  NextWindow: ['meta BACK_QUOTE'],
-  PreviousWindow: ['meta shift BACK_QUOTE'],
-  ShowSettings: ['meta COMMA'],
-  ShowProjectStructureSettings: ['meta SEMICOLON'],
+  Exit: ['meta q'],
+  CloseContent: ['meta w'],
+  NextWindow: ['meta back_quote'],
+  PreviousWindow: ['shift meta back_quote'],
+  ShowSettings: ['meta comma'],
+  ShowProjectStructureSettings: ['meta semicolon'],
 };

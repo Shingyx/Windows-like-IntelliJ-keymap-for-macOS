@@ -24,16 +24,7 @@ function processKeymapXml(xml: IKeymapXml): IKeymapXml {
   // Modify existing keystrokes
   for (const action of xml.keymap.action) {
     const actionId = action.$.id;
-
-    if (action['keyboard-shortcut']) {
-      processExistingKeystrokes(actionId, action['keyboard-shortcut'], 'first-keystroke');
-    }
-
-    if (action['mouse-shortcut']) {
-      processExistingKeystrokes(actionId, action['mouse-shortcut'], 'keystroke');
-    }
-
-    actionMap[actionId] = action;
+    actionMap[actionId] = processAction(action);
   }
 
   // Add additional keystrokes
@@ -64,26 +55,58 @@ function processKeymapXml(xml: IKeymapXml): IKeymapXml {
   };
 }
 
-function processExistingKeystrokes<T extends string>(
-  actionId: string,
-  shortcuts: { $: { [key in T]: string } }[],
-  keystrokeId: T,
-): void {
-  for (let i = shortcuts.length - 1; i >= 0; i--) {
-    const shortcut = shortcuts[i];
+function processAction(action: IKeymapXmlAction): IKeymapXmlAction {
+  const actionId = action.$.id;
+  const result: IKeymapXmlAction = {
+    $: { id: actionId },
+  };
 
-    if (/\balt\b/.test(shortcut.$[keystrokeId])) {
-      if (altConflicts[actionId] == null) {
-        shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\balt\b/, 'meta');
-      } else if (altConflicts[actionId] === ConflictAction.REMOVE) {
-        shortcuts.splice(i, 1);
+  if (action['keyboard-shortcut']) {
+    result['keyboard-shortcut'] = [];
+    for (const shortcut of action['keyboard-shortcut']) {
+      const firstKeystroke = processKeystroke(actionId, shortcut.$['first-keystroke']);
+      if (!firstKeystroke) {
+        continue;
       }
-    }
-
-    if (/\bINSERT\b/.test(shortcut.$[keystrokeId])) {
-      shortcut.$[keystrokeId] = shortcut.$[keystrokeId].replace(/\bINSERT\b/, 'help');
+      const secondKeystroke = processKeystroke(actionId, shortcut.$['second-keystroke']);
+      result['keyboard-shortcut'].push({
+        $: { 'first-keystroke': firstKeystroke, 'second-keystroke': secondKeystroke },
+      });
     }
   }
+
+  if (action['mouse-shortcut']) {
+    result['mouse-shortcut'] = [];
+    for (const shortcut of action['mouse-shortcut']) {
+      const keystroke = processKeystroke(actionId, shortcut.$.keystroke);
+      if (!keystroke) {
+        continue;
+      }
+      result['mouse-shortcut'].push({
+        $: { keystroke: keystroke },
+      });
+    }
+  }
+
+  return result;
+}
+
+function processKeystroke(actionId: string, keystroke: string | undefined): string | undefined {
+  if (!keystroke) {
+    return;
+  }
+  keystroke = keystroke.toLowerCase();
+  if (/\balt\b/.test(keystroke)) {
+    if (altConflicts[actionId] === ConflictAction.REMOVE) {
+      return;
+    }
+    if (altConflicts[actionId] == null) {
+      keystroke = keystroke.replace(/\balt\b/, 'meta');
+    }
+  }
+  keystroke = keystroke.replace(/\binsert\b/, 'help');
+  keystroke = keystroke.replace(/\bcontrol\b/, 'ctrl');
+  return keystroke;
 }
 
 async function fetchDefaultKeymap(): Promise<string> {
