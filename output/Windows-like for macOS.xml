@@ -1029,7 +1029,7 @@
     <keyboard-shortcut first-keystroke="meta j" />
   </action>
   <action id="SelectVirtualTemplateElement">
-    <keyboard-shortcut first-keystroke="shift alt o" />
+    <keyboard-shortcut first-keystroke="shift meta o" />
   </action>
   <action id="SendEOF">
     <keyboard-shortcut first-keystroke="ctrl d" />
