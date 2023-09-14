@@ -28,18 +28,11 @@ function processKeymapXml(xml: IKeymapXml): IKeymapXml {
   }
 
   // Add additional keystrokes
-  for (const [actionId, additionalKeystrokes] of Object.entries(additionalMacShortcuts)) {
-    let action = actionMap[actionId];
-    if (!action) {
-      action = { $: { id: actionId } };
-      actionMap[actionId] = action;
+  for (const [actionId, keystrokes] of Object.entries(additionalMacShortcuts)) {
+    if (!actionMap[actionId]) {
+      actionMap[actionId] = { $: { id: actionId } };
     }
-    if (!action['keyboard-shortcut']) {
-      action['keyboard-shortcut'] = [];
-    }
-    for (const keystroke of additionalKeystrokes) {
-      action['keyboard-shortcut'].push({ $: { 'first-keystroke': keystroke } });
-    }
+    addShortcutsToAction(actionMap[actionId], keystrokes);
   }
 
   // Sort by actionId
@@ -89,6 +82,15 @@ function processAction(action: IKeymapXmlAction): IKeymapXmlAction {
   }
 
   return result;
+}
+
+function addShortcutsToAction(action: IKeymapXmlAction, keystrokes: string[]): void {
+  if (!action['keyboard-shortcut']) {
+    action['keyboard-shortcut'] = [];
+  }
+  for (const keystroke of keystrokes) {
+    action['keyboard-shortcut'].push({ $: { 'first-keystroke': keystroke } });
+  }
 }
 
 function processKeystroke(
