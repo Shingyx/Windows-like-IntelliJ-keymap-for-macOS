@@ -132,6 +132,12 @@
   <action id="CodeCompletion">
     <keyboard-shortcut first-keystroke="ctrl space" />
   </action>
+  <action id="CodeFloatingToolbar.GotoNextMenu">
+    <keyboard-shortcut first-keystroke="tab" />
+  </action>
+  <action id="CodeFloatingToolbar.GotoPrevMenu">
+    <keyboard-shortcut first-keystroke="shift tab" />
+  </action>
   <action id="CodeInspection.OnEditor">
     <keyboard-shortcut first-keystroke="shift meta i" />
   </action>
