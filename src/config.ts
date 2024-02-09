@@ -16,6 +16,7 @@ export const altConflicts: { [actionId: string]: ConflictAction } = {
   'Diff.ApplyLeftSide': ConflictAction.REMOVE, // shift alt right
   'Diff.ApplyRightSide': ConflictAction.REMOVE, // shift alt left
   'Vcs.QuickListPopupAction': ConflictAction.KEEP, // alt back_quote
+  'Vcs.ToggleAmendCommitMode': ConflictAction.KEEP, // alt m
   EditorContextInfo: ConflictAction.KEEP, // alt q
   EditorAddCaretPerSelectedLine: ConflictAction.KEEP, // shift alt g
 };
@@ -61,6 +62,7 @@ export const additionalMacShortcuts: { [actionId: string]: string[] } = {
   // Navigation
   Exit: ['meta q'],
   CloseContent: ['meta w'],
+  MinimizeCurrentWindow: ['meta m'],
   NextWindow: ['meta back_quote'],
   PreviousWindow: ['shift meta back_quote'],
   ShowSettings: ['meta comma'],
