@@ -819,6 +819,9 @@
   <action id="MethodUp">
     <keyboard-shortcut first-keystroke="meta up" />
   </action>
+  <action id="MinimizeCurrentWindow">
+    <keyboard-shortcut first-keystroke="meta m" />
+  </action>
   <action id="Move">
     <keyboard-shortcut first-keystroke="f6" />
   </action>
@@ -1288,7 +1291,7 @@
     <keyboard-shortcut first-keystroke="ctrl m" />
   </action>
   <action id="Vcs.ToggleAmendCommitMode">
-    <keyboard-shortcut first-keystroke="meta m" />
+    <keyboard-shortcut first-keystroke="alt m" />
   </action>
   <action id="VcsHistory.ShowAllAffected">
     <keyboard-shortcut first-keystroke="shift meta a" />
