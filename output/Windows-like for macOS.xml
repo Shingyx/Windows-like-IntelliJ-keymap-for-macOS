@@ -1046,9 +1046,6 @@
   <action id="ServiceView.GroupByContributor">
     <keyboard-shortcut first-keystroke="ctrl meta t" />
   </action>
-  <action id="ServiceView.GroupByServiceGroups">
-    <keyboard-shortcut first-keystroke="ctrl meta p" />
-  </action>
   <action id="ServiceView.ShowServices">
     <keyboard-shortcut first-keystroke="shift ctrl t" />
   </action>
