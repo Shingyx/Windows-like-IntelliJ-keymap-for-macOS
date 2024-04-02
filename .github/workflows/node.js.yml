@@ -20,6 +20,6 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - run: bun run check
+      - run: bun check
 
-      - run: bun run regen-keymap
+      - run: bun regen-keymap

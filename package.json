@@ -6,17 +6,17 @@
   "main": "dist/index.js",
   "bin": "dist/cli.js",
   "scripts": {
-    "prebuild": "bun run clean",
+    "prebuild": "bun clean",
     "build": "tsc",
-    "check": "bun run lint && bun run format:check",
+    "check": "bun lint && bun format:check",
     "clean": "rimraf dist",
-    "fix": "bun run lint:fix && bun run format",
-    "format": "bun run format:check --write",
+    "fix": "bun lint:fix && bun format",
+    "format": "bun format:check --write",
     "format:check": "prettier --check \"./**/*.{json,md,ts,yml}\" --ignore-path .gitignore",
     "lint": "eslint --ext .ts src",
-    "lint:fix": "bun run lint --fix",
+    "lint:fix": "bun lint --fix",
     "prepare": "bun run build",
-    "prepublishOnly": "bun run check",
+    "prepublishOnly": "bun check",
     "regen-keymap": "bun src/cli.ts"
   },
   "dependencies": {

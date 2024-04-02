@@ -12,14 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-          cache: 'yarn'
+      - uses: oven-sh/setup-bun@v1
 
-      - run: yarn --frozen-lockfile
+      - run: bun install --frozen-lockfile
 
-      - run: yarn regen-keymap
+      - run: bun regen-keymap
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
