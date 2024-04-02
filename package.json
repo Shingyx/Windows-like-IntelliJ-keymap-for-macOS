@@ -6,18 +6,18 @@
   "main": "dist/index.js",
   "bin": "dist/cli.js",
   "scripts": {
-    "prebuild": "yarn clean",
+    "prebuild": "bun run clean",
     "build": "tsc",
+    "check": "bun run lint && bun run format:check",
     "clean": "rimraf dist",
-    "fix": "yarn lint:fix && yarn format",
-    "format": "yarn format:check --write",
+    "fix": "bun run lint:fix && bun run format",
+    "format": "bun run format:check --write",
     "format:check": "prettier --check \"./**/*.{json,md,ts,yml}\" --ignore-path .gitignore",
     "lint": "eslint --ext .ts src",
-    "lint:fix": "yarn lint --fix",
-    "prepare": "yarn build",
-    "prepublishOnly": "yarn run-checks",
-    "regen-keymap": "node dist/cli.js",
-    "run-checks": "yarn lint && yarn format:check"
+    "lint:fix": "bun run lint --fix",
+    "prepare": "bun run build",
+    "prepublishOnly": "bun run check",
+    "regen-keymap": "bun src/cli.ts"
   },
   "dependencies": {
     "tslib": "^2.6.2",
@@ -33,6 +33,6 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
-    "typescript": "^5.2.2"
+    "typescript": "~5.2.2"
   }
 }
