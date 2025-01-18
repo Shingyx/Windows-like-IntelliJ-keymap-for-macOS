@@ -182,6 +182,9 @@
     <keyboard-shortcut first-keystroke="ctrl slash" />
     <keyboard-shortcut first-keystroke="ctrl divide" />
   </action>
+  <action id="Compare.SameVersion">
+    <keyboard-shortcut first-keystroke="ctrl d" />
+  </action>
   <action id="CompareTwoFiles">
     <keyboard-shortcut first-keystroke="ctrl d" />
   </action>
