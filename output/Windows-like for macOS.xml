@@ -668,6 +668,9 @@
     <keyboard-shortcut first-keystroke="meta help" />
     <keyboard-shortcut first-keystroke="meta n" />
   </action>
+  <action id="Git.CreateNewBranch">
+    <keyboard-shortcut first-keystroke="ctrl meta n" />
+  </action>
   <action id="Git.New.Branch.In.Log">
     <keyboard-shortcut first-keystroke="ctrl meta n" />
   </action>
@@ -678,9 +681,6 @@
   <action id="Git.Reword.Commit">
     <keyboard-shortcut first-keystroke="f2" />
     <keyboard-shortcut first-keystroke="shift f6" />
-  </action>
-  <action id="GitNewBranchAction">
-    <keyboard-shortcut first-keystroke="ctrl meta n" />
   </action>
   <action id="GotoAction">
     <keyboard-shortcut first-keystroke="shift ctrl a" />
