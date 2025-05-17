@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -21,11 +27,19 @@ jobs:
 
       - run: yarn regen-keymap
 
-      - name: Create Pull Request
+      - name: Create PR
+        id: create-pr
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: Regenerate keymap
           branch: auto-regen
           delete-branch: true
           title: Regenerate keymap
           labels: bot
+
+      - name: Auto-merge PR
+        if: steps.create-pr.outputs.pull-request-operation == "created"
+        run: gh pr merge --merge --auto "${{ steps.create-pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
