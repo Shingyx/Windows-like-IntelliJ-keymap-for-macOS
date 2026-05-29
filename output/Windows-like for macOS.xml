@@ -995,6 +995,7 @@
   <action id="Run">
     <keyboard-shortcut first-keystroke="shift f10" />
   </action>
+  <action id="RunAnything" />
   <action id="RunClass">
     <keyboard-shortcut first-keystroke="shift ctrl f10" />
   </action>
@@ -1011,6 +1012,7 @@
   <action id="SaveAll">
     <keyboard-shortcut first-keystroke="ctrl s" />
   </action>
+  <action id="SearchEverywhere" />
   <action id="SearchEverywhere.CompleteCommand">
     <keyboard-shortcut first-keystroke="tab" />
   </action>
