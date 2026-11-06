@@ -44,7 +44,6 @@
   <action id="ActivateFindToolWindow">
     <keyboard-shortcut first-keystroke="meta 3" />
   </action>
-  <action id="ActivateHierarchyToolWindow" />
   <action id="ActivateNuGetToolWindow">
     <keyboard-shortcut first-keystroke="shift meta 7" />
   </action>
